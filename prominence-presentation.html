@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prominence – Your Complete Creative & Digital Growth Partner</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --black: #0A0A0A;
+    --dark: #111214;
+    --dark2: #181A1E;
+    --dark3: #202328;
+    --white: #F5F3EE;
+    --muted: rgba(245,243,238,0.45);
+    --accent: #C9A84C;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--gold);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.15s ease, width 0.2s, height 0.2s;
+    transform: translate(-50%,-50%);
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(201,168,76,0.5);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transition: transform 0.35s ease, width 0.3s, height 0.3s, opacity 0.3s;
+    transform: translate(-50%,-50%);
+  }
+
+  /* Progress bar */
+  #progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    z-index: 1000;
+    transition: width 0.3s ease;
+    width: 0%;
+  }
+
+  /* Nav dots */
+  #nav-dots {
+    position: fixed;
+    right: 28px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 500;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .nav-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: rgba(201,168,76,0.3);
+    cursor: pointer;
+    transition: all 0.3s;
+    border: none;
+    outline: none;
+  }
+  .nav-dot.active {
+    background: var(--gold);
+    transform: scale(1.6);
+  }
+  .nav-dot:hover { background: var(--gold); }
+
+  /* Slide base */
+  .slide {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide-inner {
+    max-width: 1000px;
+    width: 100%;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Slide number */
+  .slide-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: var(--gold);
+    margin-bottom: 40px;
+    opacity: 0.7;
+  }
+
+  /* Headings */
+  .display {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(64px, 10vw, 120px);
+    line-height: 0.9;
+    letter-spacing: 2px;
+    color: var(--white);
+  }
+  .display em {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    color: var(--gold);
+  }
+  h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(38px, 6vw, 72px);
+    line-height: 1;
+    letter-spacing: 1px;
+    margin-bottom: 32px;
+  }
+  h2 span { color: var(--gold); }
+  p.lead {
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--muted);
+    max-width: 580px;
+    font-weight: 300;
+  }
+
+  /* Divider */
+  .gold-line {
+    width: 60px;
+    height: 2px;
+    background: var(--gold);
+    margin: 28px 0;
+  }
+
+  /* Cards grid */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 36px;
+  }
+  .card {
+    background: var(--dark2);
+    border: 1px solid rgba(201,168,76,0.12);
+    border-radius: 2px;
+    padding: 28px 24px;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .card:hover {
+    border-color: var(--gold);
+    transform: translateY(-4px);
+  }
+  .card-icon {
+    font-size: 28px;
+    margin-bottom: 14px;
+    display: block;
+  }
+  .card-title {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--white);
+  }
+  .card-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 6px;
+    line-height: 1.5;
+  }
+
+  /* List */
+  .fancy-list {
+    list-style: none;
+    margin-top: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .fancy-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    font-size: 16px;
+    color: var(--muted);
+    font-weight: 300;
+  }
+  .fancy-list li::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--gold);
+    border-radius: 50%;
+    margin-top: 8px;
+    flex-shrink: 0;
+  }
+  .fancy-list li strong { color: var(--white); font-weight: 500; }
+
+  /* Two-col layout */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+  @media(max-width: 680px) {
+    .two-col { grid-template-columns: 1fr; gap: 32px; }
+    .cards { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* Highlight block */
+  .highlight-block {
+    background: linear-gradient(135deg, rgba(201,168,76,0.12), rgba(201,168,76,0.04));
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 2px;
+    padding: 32px;
+    margin-top: 32px;
+  }
+  .highlight-block .big-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 96px;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .highlight-block p {
+    font-size: 16px;
+    color: var(--muted);
+    margin-top: 8px;
+  }
+
+  /* Steps */
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 32px;
+  }
+  .step {
+    display: flex;
+    gap: 24px;
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(201,168,76,0.1);
+    align-items: flex-start;
+  }
+  .step:last-child { border-bottom: none; }
+  .step-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: rgba(201,168,76,0.3);
+    line-height: 1;
+    min-width: 40px;
+  }
+  .step-content .step-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 4px;
+    letter-spacing: 0.5px;
+  }
+  .step-content .step-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* BG decorations */
+  .bg-num {
+    position: absolute;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(200px, 30vw, 400px);
+    color: rgba(201,168,76,0.03);
+    right: -20px;
+    bottom: -40px;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+  }
+
+  .bg-circle {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Closing slide */
+  #slide-15 {
+    background: var(--dark2);
+    text-align: center;
+    justify-content: center;
+  }
+  #slide-15 .display { font-size: clamp(52px, 8vw, 100px); }
+  #slide-15 p { margin: 0 auto; text-align: center; }
+
+  /* Title slide */
+  #slide-1 { background: var(--black); }
+  #slide-1::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 60% at 80% 50%, rgba(201,168,76,0.07) 0%, transparent 70%);
+    z-index: 0;
+  }
+  .tagline {
+    font-size: 13px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 500;
+    margin-bottom: 20px;
+  }
+  .subtitle {
+    font-size: 17px;
+    color: var(--muted);
+    margin-top: 24px;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+  }
+
+  /* Scroll hint */
+  .scroll-hint {
+    position: absolute;
+    bottom: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0.4;
+    animation: bob 2s ease-in-out infinite;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--white);
+  }
+  .scroll-arrow { width: 1px; height: 40px; background: var(--gold); }
+  @keyframes bob { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(6px)} }
+
+  /* Animations */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-d1 { transition-delay: 0.1s; }
+  .reveal-d2 { transition-delay: 0.2s; }
+  .reveal-d3 { transition-delay: 0.3s; }
+  .reveal-d4 { transition-delay: 0.4s; }
+  .reveal-d5 { transition-delay: 0.5s; }
+  .reveal-d6 { transition-delay: 0.6s; }
+  .reveal-d7 { transition-delay: 0.7s; }
+
+  /* Tag chips */
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 28px;
+  }
+  .chip {
+    padding: 8px 18px;
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 30px;
+    font-size: 13px;
+    color: var(--gold);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    transition: background 0.2s;
+  }
+  .chip:hover { background: rgba(201,168,76,0.1); }
+
+  /* CRM table style */
+  .crm-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 32px;
+    font-size: 13px;
+  }
+  .crm-table th {
+    text-align: left;
+    padding: 12px 16px;
+    background: rgba(201,168,76,0.1);
+    color: var(--gold);
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border: 1px solid rgba(201,168,76,0.15);
+  }
+  .crm-table td {
+    padding: 12px 16px;
+    border: 1px solid rgba(201,168,76,0.08);
+    color: var(--muted);
+  }
+  .crm-table tr:hover td { background: rgba(201,168,76,0.04); }
+
+  /* Status dots */
+  .status { display: inline-flex; align-items: center; gap: 6px; }
+  .dot-cold { width:7px;height:7px;border-radius:50%;background:#4A90E2; }
+  .dot-contacted { width:7px;height:7px;border-radius:50%;background:var(--gold); }
+  .dot-closed { width:7px;height:7px;border-radius:50%;background:#52C479; }
+
+  /* Slide backgrounds */
+  .slide:nth-child(even) { background: var(--dark); }
+  .slide:nth-child(odd) { background: var(--black); }
+  #slide-1 { background: var(--black) !important; }
+  #slide-15 { background: var(--dark2) !important; }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div id="progress-bar"></div>
+
+<nav id="nav-dots"></nav>
+
+<!-- SLIDE 1 – TITLE -->
+<section class="slide" id="slide-1">
+  <div class="bg-circle" style="width:600px;height:600px;border:1px solid rgba(201,168,76,0.05);top:-200px;right:-200px;"></div>
+  <div class="bg-circle" style="width:300px;height:300px;border:1px solid rgba(201,168,76,0.08);bottom:40px;left:-100px;"></div>
+  <div class="slide-inner">
+    <p class="tagline reveal">Welcome to</p>
+    <div class="display reveal reveal-d1">PROMI<em>NENCE</em></div>
+    <div class="gold-line reveal reveal-d2"></div>
+    <p class="subtitle reveal reveal-d3">Your Complete Creative &amp; Digital Growth Partner</p>
+  </div>
+  <div class="scroll-hint">
+    <span>scroll</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- SLIDE 2 – WHAT IS PROMINENCE -->
+<section class="slide" id="slide-2">
+  <div class="bg-num">02</div>
+  <div class="slide-inner two-col">
+    <div>
+      <p class="slide-num reveal">02 / ABOUT</p>
+      <h2 class="reveal reveal-d1">What is <span>Prominence?</span></h2>
+      <div class="gold-line reveal reveal-d2"></div>
+      <p class="lead reveal reveal-d3">A full-service creative and digital solutions company — helping businesses handle all their media, branding, and marketing needs in <strong style="color:var(--white)">one place.</strong></p>
+    </div>
+    <div class="reveal reveal-d4">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="card" style="grid-column:span 2;">
+          <span class="card-icon">🎯</span>
+          <div class="card-title">One-Stop Shop</div>
+          <div class="card-sub">From branding to paid ads — we do it all under one roof.</div>
+        </div>
+        <div class="card">
+          <span class="card-icon">📈</span>
+          <div class="card-title">Growth Focused</div>
+          <div class="card-sub">Every service drives real business results.</div>
+        </div>
+        <div class="card">
+          <span class="card-icon">🤝</span>
+          <div class="card-title">True Partner</div>
+          <div class="card-sub">We grow when our clients grow.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 3 – SERVICES -->
+<section class="slide" id="slide-3">
+  <div class="bg-num">03</div>
+  <div class="slide-inner">
+    <p class="slide-num reveal">03 / SERVICES</p>
+    <h2 class="reveal reveal-d1">What We <span>Deliver</span></h2>
+    <div class="gold-line reveal reveal-d2"></div>
+    <div class="cards reveal reveal-d3">
+      <div class="card"><span class="card-icon">📸</span><div class="card-title">Photography</div><div class="card-sub">Professional brand & product shoots</div></div>
+      <div class="card"><span class="card-icon">🎬</span><div class="card-title">Videography</div><div class="card-sub">Cinematic video production</div></div>
+      <div class="card"><span class="card-icon">✂️</span><div class="card-title">Video Editing</div><div class="card-sub">Post-production & motion graphics</div></div>
+      <div class="card"><span class="card-icon">🎨</span><div class="card-title">Graphic Design</div><div class="card-sub">Branding, visuals & creatives</div></div>
+      <div class="card"><span class="card-icon">📱</span><div class="card-title">Social Media</div><div class="card-sub">Full account management</div></div>
+      <div class="card"><span class="card-icon">🌐</span><div class="card-title">Digital Marketing</div><div class="card-sub">SEO, content & strategy</div></div>
+      <div class="card" style="grid-column: span 1;"><span class="card-icon">💰</span><div class="card-title">Paid Ads</div><div class="card-sub">Meta, Google, TikTok & more</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 4 – VALUE -->
+<section class="slide" id="slide-4">
+  <div class="bg-num">04</div>
+  <div class="slide-inner two-col">
+    <div>
+      <p class="slide-num reveal">04 / VALUE</p>
+      <h2 class="reveal reveal-d1">Why <span>Choose Us?</span></h2>
+      <div class="gold-line reveal reveal-d2"></div>
+      <ul class="fancy-list reveal reveal-d3">
+        <li><strong>One partner for everything</strong> — no juggling multiple agencies</li>
+        <li><strong>Customized solutions</strong> — built around each client's goals</li>
+        <li><strong>High-quality production</strong> — premium output, always</li>
+        <li><strong>ROI-driven approach</strong> — every decision serves business growth</li>
+      </ul>
+    </div>
+    <div class="reveal reveal-d4" style="text-align:center;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:140px;color:rgba(201,168,76,0.08);line-height:1;position:absolute;pointer-events:none;">★</div>
+      <div style="font-size:72px;margin-bottom:16px;">🏆</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gold);letter-spacing:2px;">Premium Quality</div>
+      <div style="font-size:14px;color:var(--muted);margin-top:8px;">Delivered every time</div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 5 – WHO WE WORK WITH -->
+<section class="slide" id="slide-5">
+  <div class="bg-num">05</div>
+  <div class="slide-inner">
+    <p class="slide-num reveal">05 / CLIENTS</p>
+    <h2 class="reveal reveal-d1">Who We <span>Work With</span></h2>
+    <div class="gold-line reveal reveal-d2"></div>
+    <p class="lead reveal reveal-d3">We serve any business that wants to grow — regardless of size or industry.</p>
+    <div class="chips reveal reveal-d4">
+      <div class="chip">🚀 Startups</div>
+      <div class="chip">🏢 SMBs</div>
+      <div class="chip">🏛️ Established Brands</div>
+      <div class="chip">🛍️ E-Commerce</div>
+      <div class="chip">🍽️ Hospitality</div>
+      <div class="chip">⚕️ Healthcare</div>
+      <div class="chip">🎓 Education</div>
+      <div class="chip">+ Any growth-minded business</div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 6 – HOW YOU BRING CLIENTS -->
+<section class="slide" id="slide-6">
+  <div class="bg-num">06</div>
+  <div class="slide-inner two-col">
+    <div>
+      <p class="slide-num reveal">06 / YOUR ROLE</p>
+      <h2 class="reveal reveal-d1">How You <span>Bring Clients</span></h2>
+      <div class="gold-line reveal reveal-d2"></div>
+      <p class="lead reveal reveal-d3">Your job is to actively generate opportunities. Here's how:</p>
+    </div>
+    <div class="steps reveal reveal-d4">
+      <div class="step"><div class="step-num">01</div><div class="step-content"><div class="step-title">Cold Call</div><div class="step-desc">Reach businesses directly by phone</div></div></div>
+      <div class="step"><div class="step-num">02</div><div class="step-content"><div class="step-title">Cold Email</div><div class="step-desc">Reach decision-makers in their inbox</div></div></div>
+      <div class="step"><div class="step-num">03</div><div class="step-content"><div class="step-title">Direct Message</div><div class="step-desc">LinkedIn, Instagram, and beyond</div></div></div>
+      <div class="step"><div class="step-num">04</div><div class="step-content"><div class="step-title">Follow Up</div><div class="step-desc">Nurture warm and hot leads consistently</div></div></div>
+      <div class="step"><div class="step-num">05</div><div class="step-content"><div class="step-title">Network & Visit</div><div class="step-desc">Referrals and in-person meetings close deals</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 7 – SMART SALES TACTICS -->
+<section class="slide" id="slide-7">
+  <div class="bg-num">07</div>
+  <div class="slide-inner">
+    <p class="slide-num reveal">07 / TACTICS</p>
+    <h2 class="reveal reveal-d1">Smart <span>Sales Tactics</span></h2>
+    <div class="gold-line reveal reveal-d2"></div>
+    <div class="cards reveal reveal-d3">
+      <div class="card"><span class="card-icon">🔍</span><div class="card-title">Research First</div><div class="card-sub">Know the business before you call. Find their weak points.</div></div>
+      <div class="card"><span class="card-icon">✍️</span><div class="card-title">Personalize</div><div class="card-sub">Generic pitches get ignored. Make it about them.</div></div>
+      <div class="card"><span class="card-icon">💡</span><div class="card-title">Sell the Outcome</div><div class="card-sub">Focus on how Prominence grows their revenue & visibility.</div></div>
+      <div class="card"><span class="card-icon">🔁</span><div class="card-title">Always Follow Up</div><div class="card-sub">Most sales happen after 5+ touches. Don't stop.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 8 – BUDGET -->
+<section class="slide" id="slide-8">
+  <div class="bg-num">08</div>
+  <div class="slide-inner two-col">
+    <div>
+      <p class="slide-num reveal">08 / BUDGET</p>
+      <h2 class="reveal reveal-d1">Understanding <span>the Budget</span></h2>
+      <div class="gold-line reveal reveal-d2"></div>
+      <ul class="fancy-list reveal reveal-d3">
+        <li>Ask about their <strong>current marketing spend</strong></li>
+        <li>Understand their <strong>goals and priorities</strong></li>
+        <li>Frame our services as an <strong>investment, not a cost</strong></li>
+        <li>Use <strong>value-based selling</strong> to naturally grow the budget</li>
+      </ul>
+    </div>
+    <div class="reveal reveal-d4">
+      <div class="highlight-block">
+        <div style="font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Key Mindset</div>
+        <div style="font-size:22px;font-weight:300;color:var(--white);line-height:1.5;">"They're not spending money. They're <em style='color:var(--gold);font-style:normal;font-weight:500'>buying results.</em>"</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 9 – AFTER CLIENT AGREES -->
+<section class="slide" id="slide-9">
+  <div class="bg-num">09</div>
+  <div class="slide-inner">
+    <p class="slide-num reveal">09 / PROCESS</p>
+    <h2 class="reveal reveal-d1">After the Client <span>Agrees</span></h2>
+    <div class="gold-line reveal reveal-d2"></div>
+    <div class="steps reveal reveal-d3" style="max-width:600px;">
+      <div class="step"><div class="step-num">1</div><div class="step-content"><div class="step-title">Transfer Details</div><div class="step-desc">Hand off all client info to the internal team</div></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content"><div class="step-title">Recommend Services</div><div class="step-desc">Suggest the best-fit package for their goals</div></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content"><div class="step-title">Begin Onboarding</div><div class="step-desc">The client experience starts here — make it smooth</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 10 – PACKAGES -->
+<section class="slide" id="slide-10">
+  <div class="bg-num">10</div>
+  <div class="slide-inner two-col">
+    <div>
+      <p class="slide-num reveal">10 / PACKAGES</p>
+      <h2 class="reveal reveal-d1">Packages & <span>Contracts</span></h2>
+      <div class="gold-line reveal reveal-d2"></div>
+      <ul class="fancy-list reveal reveal-d3">
+        <li>Clients receive <strong>structured service packages</strong></li>
+        <li><strong>Clear deliverables</strong> and transparent pricing</li>
+        <li>Contract is <strong>prepared and signed</strong> before work begins</li>
+      </ul>
+    </div>
+    <div class="reveal reveal-d4" style="display:flex;flex-direction:column;gap:12px;">
+      <div class="card" style="border-color:rgba(201,168,76,0.3);">
+        <span class="card-icon">📦</span>
+        <div class="card-title">Starter</div>
+        <div class="card-sub">Social media + graphic design</div>
+      </div>
+      <div class="card" style="border-color:var(--gold);background:rgba(201,168,76,0.06);">
+        <span class="card-icon">⚡</span>
+        <div class="card-title" style="color:var(--gold);">Growth ★ Popular</div>
+        <div class="card-sub">Full digital marketing + content</div>
+      </div>
+      <div class="card">
+        <span class="card-icon">🚀</span>
+        <div class="card-title">Enterprise</div>
+        <div class="card-sub">All services, custom scope</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 11 – COMMISSION -->
+<section class="slide" id="slide-11">
+  <div class="bg-num">11</div>
+  <div class="slide-inner" style="text-align:center;display:flex;flex-direction:column;align-items:center;">
+    <p class="slide-num reveal">11 / COMMISSION</p>
+    <h2 class="reveal reveal-d1">Your <span>Earnings</span></h2>
+    <div class="gold-line reveal reveal-d2" style="margin:28px auto;"></div>
+    <div class="reveal reveal-d3" style="margin-top:8px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(80px,18vw,180px);color:var(--gold);line-height:1;background:linear-gradient(135deg,#C9A84C,#E8C97A);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">15%</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:4px;color:var(--white);margin-top:8px;">COMMISSION PER DEAL</div>
+      <p style="color:var(--muted);margin-top:16px;font-size:16px;font-weight:300;">Confirmed once the contract is signed. No cap. No limit.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 12 – ONGOING SUPPORT -->
+<section class="slide" id="slide-12">
+  <div class="bg-num">12</div>
+  <div class="slide-inner two-col">
+    <div>
+      <p class="slide-num reveal">12 / SUPPORT</p>
+      <h2 class="reveal reveal-d1">You're Never <span>Alone</span></h2>
+      <div class="gold-line reveal reveal-d2"></div>
+      <p class="lead reveal reveal-d3">Our management team backs you throughout the entire sales process.</p>
+      <ul class="fancy-list reveal reveal-d4">
+        <li><strong>Management support</strong> available when needed</li>
+        <li>Help with <strong>client communication</strong> and closing</li>
+        <li>Guidance from <strong>first contact</strong> to signed contract</li>
+      </ul>
+    </div>
+    <div class="reveal reveal-d5" style="text-align:center;">
+      <div style="font-size:80px;margin-bottom:16px;">🤝</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;color:var(--gold);">Team Behind You</div>
+      <div style="font-size:14px;color:var(--muted);margin-top:8px;max-width:220px;margin-left:auto;margin-right:auto;">We win together. Your success is our success.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 13 – CRM -->
+<section class="slide" id="slide-13">
+  <div class="bg-num">13</div>
+  <div class="slide-inner">
+    <p class="slide-num reveal">13 / CRM</p>
+    <h2 class="reveal reveal-d1">Lead <span>Tracking</span></h2>
+    <div class="gold-line reveal reveal-d2"></div>
+    <p class="lead reveal reveal-d3">We use a shared Google Docs CRM — simple, transparent, and effective.</p>
+    <div class="reveal reveal-d4">
+      <table class="crm-table">
+        <thead>
+          <tr>
+            <th>Sales Rep</th>
+            <th>Lead / Business</th>
+            <th>Contact</th>
+            <th>Status</th>
+            <th>Follow-up</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Alex M.</td>
+            <td>Sunrise Cafe</td>
+            <td>@sunrise_cafe</td>
+            <td><span class="status"><span class="dot-cold"></span> Cold</span></td>
+            <td>Feb 28</td>
+          </tr>
+          <tr>
+            <td>Sara K.</td>
+            <td>FitZone Studio</td>
+            <td>info@fitzone.com</td>
+            <td><span class="status"><span class="dot-contacted"></span> Contacted</span></td>
+            <td>Mar 1</td>
+          </tr>
+          <tr>
+            <td>Omar R.</td>
+            <td>Luxury Stays</td>
+            <td>+962 77 ...</td>
+            <td><span class="status"><span class="dot-closed"></span> Closed ✓</span></td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 14 – PERFORMANCE TRACKING -->
+<section class="slide" id="slide-14">
+  <div class="bg-num">14</div>
+  <div class="slide-inner two-col">
+    <div>
+      <p class="slide-num reveal">14 / PERFORMANCE</p>
+      <h2 class="reveal reveal-d1">Track. <span>Improve.</span> Win.</h2>
+      <div class="gold-line reveal reveal-d2"></div>
+      <ul class="fancy-list reveal reveal-d3">
+        <li>Identify <strong>missed follow-ups</strong> before they cost you a deal</li>
+        <li>Monitor and <strong>improve conversion rates</strong> over time</li>
+        <li>Track <strong>individual performance</strong> with full transparency</li>
+        <li>Build a culture of <strong>accountability and growth</strong></li>
+      </ul>
+    </div>
+    <div class="reveal reveal-d4">
+      <div class="highlight-block">
+        <div style="display:flex;flex-direction:column;gap:20px;">
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Follow-Up Rate</span><span style="font-size:12px;color:var(--gold);">84%</span></div>
+            <div style="height:4px;background:rgba(201,168,76,0.15);border-radius:2px;"><div style="width:84%;height:100%;background:var(--gold);border-radius:2px;"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Conversion Rate</span><span style="font-size:12px;color:var(--gold);">61%</span></div>
+            <div style="height:4px;background:rgba(201,168,76,0.15);border-radius:2px;"><div style="width:61%;height:100%;background:var(--gold);border-radius:2px;"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Deals Closed</span><span style="font-size:12px;color:var(--gold);">92%</span></div>
+            <div style="height:4px;background:rgba(201,168,76,0.15);border-radius:2px;"><div style="width:92%;height:100%;background:var(--gold);border-radius:2px;"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 15 – CLOSING -->
+<section class="slide" id="slide-15">
+  <div class="bg-circle" style="width:800px;height:800px;border:1px solid rgba(201,168,76,0.04);top:50%;left:50%;transform:translate(-50%,-50%);"></div>
+  <div class="bg-circle" style="width:500px;height:500px;border:1px solid rgba(201,168,76,0.07);top:50%;left:50%;transform:translate(-50%,-50%);"></div>
+  <div class="slide-inner" style="text-align:center;">
+    <p class="slide-num reveal" style="text-align:center;">15 / CLOSING</p>
+    <div class="display reveal reveal-d1" style="font-size:clamp(48px,8vw,96px);">YOUR EFFORT =<br><em>YOUR RESULTS</em></div>
+    <div class="gold-line reveal reveal-d2" style="margin:32px auto;"></div>
+    <p class="lead reveal reveal-d3" style="margin:0 auto;text-align:center;max-width:480px;">Prominence grows businesses — and rewards the people who make it happen. Now go close deals.</p>
+    <div class="reveal reveal-d4" style="margin-top:48px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:6px;color:var(--gold);">PROMINENCE</div>
+      <div style="font-size:12px;letter-spacing:3px;color:var(--muted);margin-top:6px;text-transform:uppercase;">Creative & Digital Growth Partner</div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top = my + 'px';
+  });
+  function animateRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  // Nav dots
+  const slides = document.querySelectorAll('.slide');
+  const navDots = document.getElementById('nav-dots');
+  slides.forEach((slide, i) => {
+    const dot = document.createElement('button');
+    dot.className = 'nav-dot';
+    dot.setAttribute('aria-label', `Go to slide ${i+1}`);
+    dot.addEventListener('click', () => slide.scrollIntoView({ behavior: 'smooth' }));
+    navDots.appendChild(dot);
+  });
+  const dots = document.querySelectorAll('.nav-dot');
+
+  // Progress bar + active dot
+  function onScroll() {
+    const scrollTop = window.scrollY;
+    const docH = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = (scrollTop / docH) * 100;
+    document.getElementById('progress-bar').style.width = pct + '%';
+
+    slides.forEach((slide, i) => {
+      const rect = slide.getBoundingClientRect();
+      if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
+        dots.forEach(d => d.classList.remove('active'));
+        dots[i].classList.add('active');
+      }
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, { threshold: 0.15 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
